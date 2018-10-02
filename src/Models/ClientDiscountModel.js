@@ -36,7 +36,6 @@ class ClientDiscount {
 
   create = (data) => {
     const error = this._validating(data)
-    console.log('error',error)
     if (!error){
       ClientDiscountsCollection.insert({
         clientName: data.clientName,

@@ -66,7 +66,6 @@ describe('ClientDiscount', () => {
 
     const ClientDiscountObject = new ClientDiscount()
     const temp = ClientDiscountObject.create({clientName:'ClientRepeated', discountNames:['DiscountRepeated']})
-    console.log('temp',temp)
     const res = ClientDiscountObject.create({clientName:'ClientRepeated', discountNames:['DiscountRepeated']})
 
     expect(res.status).to.equal('error')
