@@ -1,0 +1,22 @@
+{
+  "name": "sample-nodejs-app",
+  "scripts": {
+    "dev": "nodemon ./src/index.js",
+    "test:watch": "mocha ./src/**/*.test.js --watch --require babel-register"
+  },
+  "author": "Ehsan Gazar",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.4"
+  },
+  "dependencies": {
+    "dotenv": "^6.0.0",
+    "lokijs": "^1.5.5",
+    "winston": "^3.1.0"
+  }
+}
