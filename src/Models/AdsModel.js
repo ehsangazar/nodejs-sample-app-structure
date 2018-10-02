@@ -5,44 +5,39 @@ const AdsCollection = database.addCollection('Ads');
 class AdsModel {
   _validating = (data = {}) => {
     if (
-      data.name &&
-      data.logo >= 0 &&
-      data.standingTime && 
-      data.priority >= 0,
-      data.price
-    ){
-      if (data.name && data.name != '' && data.name.length < 20){
-        const checkForExistence = AdsCollection.find({ name: data.name });
-        if (!checkForExistence || checkForExistence.length === 0) {  
-          if (['short','medium','long'].includes(data.standingTime)){  
-            if (data.priority === 0 || data.priority === 1) {              
-              if (data.logo === 0 || data.logo === 1){
-
-                if (data.price < 0) return 'price is not valid'
-                
-                return false
-              }else {
-                return 'logo is not valid'
-              }
-            }else {
-              return 'priority is not valid'
-            }
-          }else {
-            return 'standingTime is not valid'
-          }
-        }else {
-          return 'Name exists in the db'
-        }
-      }else {
-        return 'name is not valid'
-      }
-    }else {
+      typeof data.name === "undefined" || 
+      typeof data.logo === "undefined" || 
+      typeof data.standingTime === "undefined" || 
+      typeof data.priority === "undefined" || 
+      typeof data.price === "undefined"
+    ) 
       return 'data is not valid'
-    }
+
+    if (data.name === '' || data.name.length >= 20) 
+      return 'name is not valid'
+
+    const checkForExistence = AdsCollection.find({ name: data.name });
+    if (checkForExistence && checkForExistence.length > 0) 
+      return 'Name exists in the db'
+      
+    if (!['short','medium','long'].includes(data.standingTime)) 
+      return 'standingTime is not valid'
+
+    if (data.priority !== 0 && data.priority !== 1)           
+      return 'priority is not valid'
+    
+    if (data.logo !== 0 && data.logo !== 1)
+      return 'logo is not valid'
+
+    if (data.price < 0) 
+      return 'price is not valid'
+
+    return false
   }
 
   create = (data) => {
     const error = this._validating(data)
+    console.log('error',error)
     if (!error){
       AdsCollection.insert({
         name: data.name,
