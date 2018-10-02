@@ -2,7 +2,7 @@
   "name": "sample-nodejs-app",
   "scripts": {
     "dev": "nodemon ./src/index.js",
-    "test:watch": "mocha ./src/**/*.test.js --watch --require babel-register"
+    "test:watch": "NODE_ENV=test mocha ./src/**/*.test.js --watch --require babel-register"
   },
   "author": "Ehsan Gazar",
   "devDependencies": {
@@ -11,6 +11,11 @@
     "babel-preset-env": "^1.7.0",
     "babel-register": "^6.26.0",
     "chai": "^4.2.0",
+    "eslint": "^5.6.1",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.11.1",
     "mocha": "^5.2.0",
     "nodemon": "^1.18.4"
   },
