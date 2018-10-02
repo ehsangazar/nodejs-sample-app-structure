@@ -39,7 +39,7 @@ class ClientDiscount {
     if (!error){
       ClientDiscountsCollection.insert({
         clientName: data.clientName,
-        discountName: data.discountNames
+        discountNames: data.discountNames
       })
       return {
         status: 'ok'
