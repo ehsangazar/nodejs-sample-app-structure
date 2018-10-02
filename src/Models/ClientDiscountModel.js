@@ -53,7 +53,13 @@ class ClientDiscount {
   }
 
 
-  find = (data) => {
+  find = (data = {}) => {
+    if (!data.clientName) 
+      return {
+        status: 'error',
+        error: 'no entry found'
+      }
+
     const foundItem = ClientDiscountsCollection.find({ clientName: data.clientName });
     if (!foundItem || foundItem.length === 0) {
       return {
@@ -66,6 +72,10 @@ class ClientDiscount {
         client: foundItem[0]
       }
     }
+  }
+
+  flush = () => {
+    ClientDiscountsCollection.chain().remove()
   }
 }
 

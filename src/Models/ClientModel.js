@@ -37,7 +37,13 @@ class ClientModel {
   }
 
 
-  find = (data) => {
+  find = (data = {}) => {
+    if (!data.name) 
+      return {
+        status: 'error',
+        error: 'no entry found'
+      }
+      
     const foundItem = ClientsCollection.find({ name: data.name });
     if (!foundItem || foundItem.length === 0) {
       return {
@@ -50,6 +56,10 @@ class ClientModel {
         client: foundItem[0]
       }
     }
+  }
+
+  flush = () => {
+    ClientsCollection.chain().remove()
   }
 }
 

@@ -81,7 +81,13 @@ class DiscountModel {
   }
 
 
-  find = (data) => {
+  find = (data = {}) => {
+    if (!data.name) 
+      return {
+        status: 'error',
+        error: 'no entry found'
+      }
+
     const foundItem = DiscountCollection.find({ name: data.name });
     if (!foundItem || foundItem.length === 0) {
       return {
@@ -94,6 +100,10 @@ class DiscountModel {
         discount: foundItem[0]
       }
     }
+  }
+
+  flush = () => {
+    DiscountCollection.chain().remove()
   }
 }
 
