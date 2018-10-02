@@ -13,7 +13,7 @@ describe('AdsModel', () => {
     expect(res.status).to.equal('error')
     expect(res.error).to.equal('data is not valid')
   });
-  it('should not work because data is not enough', () => {
+  it('should work because data is enough', () => {
     const AdsObject = new AdsModel()
     const res = AdsObject.create({name:'Test', standingTime: 'short', logo: 0, priority: 0})
     expect(res.status).to.equal('ok')
