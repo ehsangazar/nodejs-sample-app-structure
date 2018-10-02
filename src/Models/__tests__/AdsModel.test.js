@@ -23,7 +23,7 @@ describe('AdsModel', () => {
     AdsObject.create({name:'TestRepeated', standingTime: 'short', logo: 0, priority: 0, price: 1})
     const resSecond = AdsObject.create({name:'TestRepeated', standingTime: 'short', logo: 0, priority: 0, price: 1})
     expect(resSecond.status).to.equal('error')
-    expect(resSecond.error).to.equal('Name exists in the db')
+    expect(resSecond.error).to.equal('name exists in the db')
   });
   it('should get an error if name is not defiend', () => {
     const AdsObject = new AdsModel()

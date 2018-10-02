@@ -6,43 +6,48 @@ const DiscountCollection = database.addCollection('Discount');
 class DiscountModel {
   _validating = (data = {}) => {
     if (
-      data.name 
-      && data.type 
-      && data.adsName
-      && (
-        (data.type === 'more' && data.bought && data.willget) ||
-        (data.type === 'reduce' && data.newPrice)
-      )
-    ){
-      if (data.name && data.name != '' && data.name.length < 20){
-        if (data.type === 'more' && typeof data.bought != 'number' ) 
-          return 'bought is not valid'
-        
-        if (data.type === 'more' && typeof data.willget != 'number' ) 
-          return 'willget is not valid'
-          
-        if (data.type === 'more' && data.bought >= data.willget ) 
-          return 'willget should be bigger than bought'
-
-        const checkForExistence = DiscountCollection.find({ name: data.name });
-        if (!checkForExistence || checkForExistence.length === 0) {  
-
-          const AdsObject = new AdsModel()
-          const foundResult = AdsObject.find({name:data.adsName})
-          if (foundResult.status === 'error'){
-            return 'adsName is not valid'
-          }else{
-            return false
-          }
-        }else {
-          return 'name exists in the db'
-        }
-      }else {
-        return 'name is not valid'
-      }
-    }else {
+      typeof data.name === "undefined" || 
+      typeof data.type === "undefined" || 
+      typeof data.adsName === "undefined"
+    ) 
       return 'data is not valid'
-    }
+
+    if (!['more','reduce'].includes(data.type))
+      return 'type is not valid'
+
+    if (data.type === 'more' && (
+      typeof data.bought === "undefined" || 
+      typeof data.willget === "undefined"
+    )) return 'data is not valid'
+
+
+    if (data.type === 'reduce' && (
+      typeof data.newPrice === "undefined"
+    )) return 'data is not valid'
+
+    if (data.name === '' || data.name.length >= 20) 
+      return 'name is not valid'
+    
+    if (data.type === 'more' && typeof data.bought != 'number' ) 
+      return 'bought is not valid'
+        
+    if (data.type === 'more' && typeof data.willget != 'number' ) 
+      return 'willget is not valid'
+          
+    if (data.type === 'more' && data.bought >= data.willget ) 
+      return 'willget should be bigger than bought'
+
+    const checkForExistence = DiscountCollection.find({ name: data.name });
+    if (checkForExistence && checkForExistence.length > 0)  
+      return 'name exists in the db'
+    
+    
+    const AdsObject = new AdsModel()
+    const foundResult = AdsObject.find({name:data.adsName})
+    if (foundResult.status === 'error')
+      return 'adsname is not valid'
+          
+    return false
   }
 
   create = (data) => {

@@ -73,14 +73,14 @@ describe('DiscountModel', () => {
     const DiscountObject = new DiscountModel()
     const res = DiscountObject.create({name:'TypeNotValid', type:'less', adsName: 'classic', bought:2, willget:3})
     expect(res.status).to.equal('error')
-    expect(res.error).to.equal('data is not valid')
+    expect(res.error).to.equal('type is not valid')
   });
-  it('should get an error if adsName is not valid', () => {
+  it('should get an error if adsname is not valid', () => {
     _creatingDefaultAds()
     const DiscountObject = new DiscountModel()
     const res = DiscountObject.create({name:'AdsNameNotValid', type:'more', adsName: 'classicThatDoesntExist', bought:2, willget:3})
     expect(res.status).to.equal('error')
-    expect(res.error).to.equal('adsName is not valid')
+    expect(res.error).to.equal('adsname is not valid')
   });
   it('should get an error if bought is not valid', () => {
     _creatingDefaultAds()

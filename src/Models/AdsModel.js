@@ -18,7 +18,7 @@ class AdsModel {
 
     const checkForExistence = AdsCollection.find({ name: data.name });
     if (checkForExistence && checkForExistence.length > 0) 
-      return 'Name exists in the db'
+      return 'name exists in the db'
       
     if (!['short','medium','long'].includes(data.standingTime)) 
       return 'standingTime is not valid'
@@ -37,7 +37,6 @@ class AdsModel {
 
   create = (data) => {
     const error = this._validating(data)
-    console.log('error',error)
     if (!error){
       AdsCollection.insert({
         name: data.name,

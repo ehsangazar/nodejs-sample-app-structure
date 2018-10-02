@@ -4,16 +4,19 @@ const ClientsCollection = database.addCollection('Clients');
 
 class ClientModel {
   _validating = (data = {}) => {
-    if (data.name && data.name != '' && data.name.length < 20){
-      const checkForExistence = ClientsCollection.find({ name: data.name });
-      if (!checkForExistence || checkForExistence.length === 0) {
-        return false
-      }else {
-        return 'Name exists in the db'
-      }
-    }else {
-      return 'Name is not valid'
-    }
+    if (
+      typeof data.name === "undefined"
+    ) 
+      return 'name is not valid'
+
+    if (data.name === '' || data.name.length >= 20) 
+      return 'name is not valid'
+
+    const checkForExistence = ClientsCollection.find({ name: data.name });
+    if (checkForExistence && checkForExistence.length > 0) 
+      return 'name exists in the db'
+
+    return false
   }
 
   create = (data) => {
