@@ -8,7 +8,8 @@ class AdsModel {
       data.name &&
       data.logo >= 0 &&
       data.standingTime && 
-      data.priority >= 0
+      data.priority >= 0,
+      data.price
     ){
       if (data.name && data.name != '' && data.name.length < 20){
         const checkForExistence = AdsCollection.find({ name: data.name });
@@ -16,11 +17,13 @@ class AdsModel {
           if (['short','medium','long'].includes(data.standingTime)){  
             if (data.priority === 0 || data.priority === 1) {              
               if (data.logo === 0 || data.logo === 1){
+
+                if (data.price < 0) return 'price is not valid'
+                
                 return false
               }else {
                 return 'logo is not valid'
               }
-  
             }else {
               return 'priority is not valid'
             }
@@ -45,7 +48,8 @@ class AdsModel {
         name: data.name,
         standingTime: data.standingTime,
         priority: data.priority,
-        logo: data.logo
+        logo: data.logo,
+        price: data.price
       })
       return {
         status: 'ok'

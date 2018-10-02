@@ -5,7 +5,7 @@ const AdsModel = require('../AdsModel')
 
 const _creatingDefaultAds = () => {
   const AdsObject = new AdsModel()
-  AdsObject.create({name:'classic', standingTime: 'short', logo: 0, priority: 0})
+  AdsObject.create({name:'classic', standingTime: 'short', logo: 0, priority: 0, price: 1})
 }
 
 describe('DiscountModel', () => {
