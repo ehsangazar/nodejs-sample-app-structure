@@ -69,7 +69,7 @@ class ClientDiscount {
     }else {
       return {
         status: 'ok',
-        client: foundItem[0]
+        clientDiscount: foundItem[0]
       }
     }
   }

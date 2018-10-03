@@ -1,6 +1,7 @@
 
 const { expect } = require('chai');
 const CheckoutController = require('../CheckoutController');
+const CheckoutModel = require('../../Models/CheckoutModel');
 const defaultPricingRule = require('../../Rules/defaultPricingRule');
 
 describe('CheckoutController', () => {
@@ -50,7 +51,7 @@ describe('CheckoutController', () => {
       item: 'nonsense',
     });
     expect(res.status).to.equal('error');
-    expect(res.error).to.equal('this item does not exist');
+    expect(res.error).to.equal('item does not exist');
   });
   it('should throw an error because client does not exist', () => {
     const CheckoutControllerObject = new CheckoutController();
@@ -60,107 +61,107 @@ describe('CheckoutController', () => {
       item: 'classic',
     });
     expect(res.status).to.equal('error');
+    expect(res.error).to.equal('clientName does not exist');
+  });
+  it('should return a right response of 987.97', () => {
+    const CheckoutControllerObject = new CheckoutController();
+    const CheckoutObject = new CheckoutModel();
+    CheckoutObject.flush();
+    CheckoutControllerObject.new(defaultPricingRule);
+    CheckoutControllerObject.addItem({
+      clientName: 'base',
+      item: 'classic',
+    });
+    CheckoutControllerObject.addItem({
+      clientName: 'base',
+      item: 'standout',
+    });
+    CheckoutControllerObject.addItem({
+      clientName: 'base',
+      item: 'premium',
+    });
+    const res = CheckoutControllerObject.getTotal({ clientName: 'base' });
+    expect(res.status).to.equal('ok');
+    expect(res.total).to.equal(987.97);
+  });
+  it('should return a right response of 934.97', () => {
+    const CheckoutControllerObject = new CheckoutController();
+    const CheckoutObject = new CheckoutModel();
+    CheckoutObject.flush();
+    CheckoutControllerObject.new(defaultPricingRule);
+    CheckoutControllerObject.addItem({
+      clientName: 'secondBite',
+      item: 'classic',
+    });
+    CheckoutControllerObject.addItem({
+      clientName: 'secondBite',
+      item: 'classic',
+    });
+    CheckoutControllerObject.addItem({
+      clientName: 'secondBite',
+      item: 'premium',
+    });
+    const res = CheckoutControllerObject.getTotal({ clientName: 'secondBite' });
+    expect(res.status).to.equal('ok');
+    expect(res.total).to.equal(934.97);
+  });
+  it('should return a right response of 1294.96', () => {
+    const CheckoutControllerObject = new CheckoutController();
+    CheckoutControllerObject.new(defaultPricingRule);
+    CheckoutControllerObject.addItem({
+      clientName: 'axilCoffee',
+      item: 'standout',
+    });
+    CheckoutControllerObject.addItem({
+      clientName: 'axilCoffee',
+      item: 'standout',
+    });
+    CheckoutControllerObject.addItem({
+      clientName: 'axilCoffee',
+      item: 'standout',
+    });
+    CheckoutControllerObject.addItem({
+      clientName: 'axilCoffee',
+      item: 'premium',
+    });
+    const res = CheckoutControllerObject.getTotal({ clientName: 'axilCoffee' });
+    expect(res.status).to.equal('ok');
+    expect(res.total).to.equal(1294.96);
+  });
+  it('should return a right response of 1949.95', () => {
+    const CheckoutControllerObject = new CheckoutController();
+    CheckoutControllerObject.new(defaultPricingRule);
+    CheckoutControllerObject.addItem({
+      clientName: 'myer',
+      item: 'premium',
+    });
+    CheckoutControllerObject.addItem({
+      clientName: 'myer',
+      item: 'premium',
+    });
+    CheckoutControllerObject.addItem({
+      clientName: 'myer',
+      item: 'premium',
+    });
+    CheckoutControllerObject.addItem({
+      clientName: 'myer',
+      item: 'premium',
+    });
+    const res = CheckoutControllerObject.getTotal({ clientName: 'myer' });
+    expect(res.status).to.equal('ok');
+    expect(res.total).to.equal(1559.96);
+  });
+  it('should throw an error because that client does not exist to get the total', () => {
+    const CheckoutControllerObject = new CheckoutController();
+    CheckoutControllerObject.new(defaultPricingRule);
+    const res = CheckoutControllerObject.getTotal({ clientName: 'notClient' });
+    expect(res.status).to.equal('error');
     expect(res.error).to.equal('this client does not exist');
   });
-  // it('should return a right response of 987.97', () => {
-  //   const CheckoutControllerObject = new CheckoutController();
-  //   CheckoutControllerObject.new(defaultPricingRule);
-  //   CheckoutControllerObject.addItem({
-  //     clientName: 'base',
-  //     item: 'classic',
-  //   });
-  //   CheckoutControllerObject.addItem({
-  //     clientName: 'base',
-  //     item: 'standout',
-  //   });
-  //   CheckoutControllerObject.addItem({
-  //     clientName: 'base',
-  //     item: 'premium',
-  //   });
-  //   const res = CheckoutControllerObject.getTotal({ clientName: 'clientName' });
-  //   expect(res.status).to.equal('ok');
-  //   expect(res.total).to.equal(987.97);
-  // });
-  // it('should return a right response of 934.97', () => {
-  //   const CheckoutControllerObject = new CheckoutController();
-  //   CheckoutControllerObject.new(defaultPricingRule);
-  //   CheckoutControllerObject.addItem({
-  //     clientName: 'secondBite',
-  //     item: 'classic',
-  //   });
-  //   CheckoutControllerObject.addItem({
-  //     clientName: 'secondBite',
-  //     item: 'classic',
-  //   });
-  //   CheckoutControllerObject.addItem({
-  //     clientName: 'secondBite',
-  //     item: 'classic',
-  //   });
-  //   CheckoutControllerObject.addItem({
-  //     clientName: 'secondBite',
-  //     item: 'premium',
-  //   });
-  //   const res = CheckoutControllerObject.getTotal({ clientName: 'clientName' });
-  //   expect(res.status).to.equal('ok');
-  //   expect(res.total).to.equal(934.97);
-  // });
-  // it('should return a right response of 1294.96', () => {
-  //   const CheckoutControllerObject = new CheckoutController();
-  //   CheckoutControllerObject.new(defaultPricingRule);
-  //   CheckoutControllerObject.addItem({
-  //     clientName: 'axilCoffee',
-  //     item: 'standout',
-  //   });
-  //   CheckoutControllerObject.addItem({
-  //     clientName: 'axilCoffee',
-  //     item: 'standout',
-  //   });
-  //   CheckoutControllerObject.addItem({
-  //     clientName: 'axilCoffee',
-  //     item: 'standout',
-  //   });
-  //   CheckoutControllerObject.addItem({
-  //     clientName: 'axilCoffee',
-  //     item: 'premium',
-  //   });
-  //   const res = CheckoutControllerObject.getTotal({ clientName: 'axilCoffee' });
-  //   expect(res.status).to.equal('ok');
-  //   expect(res.total).to.equal(1294.96);
-  // });
-  // it('should return a right response of 1949.95', () => {
-  //   const CheckoutControllerObject = new CheckoutController();
-  //   CheckoutControllerObject.new(defaultPricingRule);
-  //   CheckoutControllerObject.addItem({
-  //     clientName: 'myer',
-  //     item: 'premium',
-  //   });
-  //   CheckoutControllerObject.addItem({
-  //     clientName: 'myer',
-  //     item: 'premium',
-  //   });
-  //   CheckoutControllerObject.addItem({
-  //     clientName: 'myer',
-  //     item: 'premium',
-  //   });
-  //   CheckoutControllerObject.addItem({
-  //     clientName: 'myer',
-  //     item: 'premium',
-  //   });
-  //   const res = CheckoutControllerObject.getTotal({ clientName: 'myer' });
-  //   expect(res.status).to.equal('ok');
-  //   expect(res.total).to.equal(1949.95);
-  // });
-  // it('should throw an error because that client does not exist to get the total', () => {
-  //   const CheckoutControllerObject = new CheckoutController();
-  //   CheckoutControllerObject.new(defaultPricingRule);
-  //   const res = CheckoutControllerObject.getTotal({ clientName: 'notClient' });
-  //   expect(res.status).to.equal('error');
-  //   expect(res.error).to.equal('client does not exist');
-  // });
-  // it('should throw an error because that client is not passed to getTotal', () => {
-  //   const CheckoutControllerObject = new CheckoutController();
-  //   const res = CheckoutControllerObject.getTotal();
-  //   expect(res.status).to.equal('error');
-  //   expect(res.error).to.equal('client does not exist');
-  // });
+  it('should throw an error because that client is not passed to getTotal', () => {
+    const CheckoutControllerObject = new CheckoutController();
+    const res = CheckoutControllerObject.getTotal();
+    expect(res.status).to.equal('error');
+    expect(res.error).to.equal('client does not exist');
+  });
 });
