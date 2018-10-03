@@ -1,11 +1,14 @@
 {
   "name": "sample-nodejs-app",
   "scripts": {
-    "dev": "nodemon ./src/index.js",
-    "test:watch": "NODE_ENV=test mocha ./src/**/*.test.js --watch --require babel-register"
+    "dev": "NODE_ENV=development nodemon --exec npx babel-node -- ./src/index.js",
+    "start": "NODE_ENV=production babel-node ./src/index.js",
+    "test:watch": "NODE_ENV=test mocha ./src/**/*.test.js --watch --require babel-register",
+    "test": "NODE_ENV=test mocha ./src/**/*.test.js --require babel-register"
   },
   "author": "Ehsan Gazar",
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-env": "^1.7.0",
