@@ -23,7 +23,7 @@ module.exports = {
     },
   ],
   clients: [
-    'base', 'secondBite', 'axilCoffee', 'myer',
+    'base', 'secondBite', 'axilCoffee', 'myer', 'jora',
   ],
   discounts: [
     {
@@ -34,7 +34,7 @@ module.exports = {
       willget: 3,
     },
     {
-      name: 'discountOnStandOut',
+      name: 'discountOnStandout',
       type: 'reduce',
       adsName: 'standout',
       newPrice: 299.99,
@@ -52,6 +52,20 @@ module.exports = {
       adsName: 'premium',
       newPrice: 389.99,
     },
+    {
+      name: 'discountOnPremiumWithLimit',
+      type: 'reduceLimtiedItems',
+      adsName: 'premium',
+      limitedPurchased: 4,
+      newPrice: 379.99,
+    },
+    {
+      name: 'discountOnClassicWithLimit',
+      type: 'reduceLimtiedItems',
+      adsName: 'premium',
+      limitedPurchased: 3,
+      newPrice: 249.99,
+    },
   ],
   clientDiscount: [
     {
@@ -60,11 +74,15 @@ module.exports = {
     },
     {
       clientName: 'axilCoffee',
-      discountNames: ['discountOnStandOut'],
+      discountNames: ['discountOnStandout'],
     },
     {
       clientName: 'myer',
-      discountNames: ['moreOnPremium', 'discountOnPremium'],
+      discountNames: ['moreOnPremium', 'discountOnPremium', 'discountOnClassicWithLimit'],
+    },
+    {
+      clientName: 'jora',
+      discountNames: ['discountOnPremiumWithLimit'],
     },
   ],
 };

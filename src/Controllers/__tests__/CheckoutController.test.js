@@ -149,7 +149,30 @@ describe('CheckoutController', () => {
     });
     const res = CheckoutControllerObject.getTotal({ clientName: 'myer' });
     expect(res.status).to.equal('ok');
-    expect(res.total).to.equal(1559.96);
+    expect(res.total).to.equal(1249.95);
+  });
+  it('should return a right response of 1949.95', () => {
+    const CheckoutControllerObject = new CheckoutController();
+    CheckoutControllerObject.new(defaultPricingRule);
+    CheckoutControllerObject.addItem({
+      clientName: 'jora',
+      item: 'premium',
+    });
+    CheckoutControllerObject.addItem({
+      clientName: 'jora',
+      item: 'premium',
+    });
+    CheckoutControllerObject.addItem({
+      clientName: 'jora',
+      item: 'premium',
+    });
+    CheckoutControllerObject.addItem({
+      clientName: 'jora',
+      item: 'premium',
+    });
+    const res = CheckoutControllerObject.getTotal({ clientName: 'jora' });
+    expect(res.status).to.equal('ok');
+    expect(res.total).to.equal(1519.96);
   });
   it('should throw an error because that client does not exist to get the total', () => {
     const CheckoutControllerObject = new CheckoutController();

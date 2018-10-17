@@ -12,7 +12,7 @@ class DiscountModel {
     ) 
       return 'data is not valid'
 
-    if (!['more','reduce'].includes(data.type))
+    if (!['more','reduce', 'reduceLimtiedItems'].includes(data.type))
       return 'type is not valid'
 
     if (data.type === 'more' && (
@@ -25,7 +25,12 @@ class DiscountModel {
       typeof data.newPrice === "undefined"
     )) return 'data is not valid'
 
-    if (data.name === '' || data.name.length >= 20) 
+    if (data.type === 'reduceLimtiedItems' && (
+      typeof data.newPrice === "undefined",
+      typeof data.limitedPurchased === "undefined"
+    )) return 'data is not valid'
+
+    if (data.name === '' || data.name.length >= 40) 
       return 'name is not valid'
     
     if (data.type === 'more' && typeof data.bought != 'number' ) 
@@ -67,6 +72,14 @@ class DiscountModel {
           bought: data.bought,
           willget: data.willget,
           adsName: data.adsName
+        })
+      }else if (data.type === 'reduceLimtiedItems') {
+        DiscountCollection.insert({
+          name: data.name,
+          type: data.type,
+          adsName: data.adsName,
+          newPrice: data.newPrice,
+          limitedPurchased: data.limitedPurchased
         })
       }
       return {

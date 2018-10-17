@@ -144,49 +144,79 @@ class Checkout {
         }
       }
     }
-    let realCheckoutItems = []
 
+    // Calculating the price withoutDiscount
+    let checkoutItems = []
     for (let i = 0 ; i < checkouts.items.length ; i += 1){
-      let adsRes = this.AdsObject.find({name: checkouts.items[i].item})
-      if (adsRes.status === 'ok'){
-        let realPrice = adsRes.ads.price
-        let type = []
-        // check for discounts
-        for (let j = 0; j < discountDetails.length; j += 1) {
-          if (discountDetails[j].adsName === checkouts.items[i].item){
-            if (discountDetails[j].type === 'reduce'){
-              realPrice = discountDetails[j].newPrice
-              type.push('reduce')
-            }else if (discountDetails[j].type === 'more'){
-              if (!discountDetails[j].currentBought)
-                discountDetails[j].currentBought = 0
-                
-              discountDetails[j].currentBought += 1
-              
-              if ( discountDetails[j].currentBought === discountDetails[j].bought){
-                discountDetails[j].currentBought = 0
-                for (let k = 0; k < discountDetails[j].willget - discountDetails[j].bought; k += 1) {
-                  realCheckoutItems.push({
-                    name: checkouts.items[i].item,
-                    type: type.push('more'),
-                    price: 0
-                  })
-                }
-              }
-            }
-          }
-        }
-        realCheckoutItems.push({
-          name: checkouts.items[i].item,
-          type: type,
-          price: realPrice
+      let thisAd = this.AdsObject.find({name: checkouts.items[i].item})
+      if (thisAd.status === 'ok'){
+        checkoutItems.push({
+          clientName: checkouts.items[i].clientName,
+          item: checkouts.items[i].item,
+          ads: thisAd.ads
         })
       }
     }
-    
+
+    discountDetails.forEach(discountItem => {
+      if (discountItem.type === 'reduce'){
+        checkoutItems.map(checkout => {
+          if (checkout.item === discountItem.adsName){
+            checkout.ads.price = discountItem.newPrice
+            return checkout
+          }
+        })
+      }
+      
+      let freeCheckout = {}
+      if (discountItem.type === 'more'){
+        let bought = 0;
+        checkoutItems.map(checkout => {
+          if (checkout.item === discountItem.adsName){
+            bought++
+            freeCheckout = checkout           
+            return checkout
+          }
+        })
+        const dividedNumber = parseInt(bought / discountItem.bought)
+        if (dividedNumber >= 1){
+          const differenceNumber = discountItem.willget - discountItem.bought
+          for (let d = 0; d < dividedNumber*differenceNumber; d++) {
+            checkoutItems.push({
+              clientName: freeCheckout.clientName,
+              item: freeCheckout.item,
+              ads: {
+                price: 0
+              }
+            })
+          }
+        }
+      }
+
+
+      if (discountItem.type === 'reduceLimtiedItems'){
+        let bought = 0;
+        checkoutItems.map(checkout => {
+          if (checkout.item === discountItem.adsName){
+            bought++
+            freeCheckout = checkout           
+            return checkout
+          }
+        })
+        if (bought >= discountItem.limitedPurchased){
+          checkoutItems.map(itemRLI => {
+            if (itemRLI.item === discountItem.adsName){
+              itemRLI.ads.price = discountItem.newPrice
+            }
+            return itemRLI
+          })
+        }
+      }
+    })
+
     let total = 0
-    total = realCheckoutItems.reduce((oldResult = 0, newItem) => {
-      return Number(oldResult) + Number(newItem.price)
+    total = checkoutItems.reduce((oldResult = 0, newItem) => {
+      return Number(oldResult) + Number(newItem.ads.price)
     }, 0)
 
     return {

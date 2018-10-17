@@ -66,6 +66,31 @@ describe('DiscountModel', () => {
     });
     expect(res.status).to.equal('ok');
   });
+  it('should not work because data is not enough for reduceLimtiedItems', () => {
+    const AdsObject = new AdsModel();
+    AdsObject.create({
+      name: 'classic', standingTime: 'short', logo: 0, priority: 0, price: 1,
+    });
+
+    const DiscountObject = new DiscountModel();
+    const res = DiscountObject.create({
+      name: 'ReduceIsEnoughForThisNumberOfPurcahseddE', type: 'reduceLimtiedItems', adsName: 'classic', newPrice: 10000,
+    });
+    expect(res.status).to.equal('error');
+    expect(res.error).to.equal('data is not valid');
+  });
+  it('should work because data is enough for reduce with nunmber of purchased one', () => {
+    const AdsObject = new AdsModel();
+    AdsObject.create({
+      name: 'classic', standingTime: 'short', logo: 0, priority: 0, price: 1,
+    });
+
+    const DiscountObject = new DiscountModel();
+    const res = DiscountObject.create({
+      name: 'okreduceLimti', type: 'reduceLimtiedItems', adsName: 'classic', newPrice: 10000, limitedPurchased: 4,
+    });
+    expect(res.status).to.equal('ok');
+  });
   it('should work because data is enough for more', () => {
     const AdsObject = new AdsModel();
     AdsObject.create({
@@ -94,7 +119,7 @@ describe('DiscountModel', () => {
     expect(resSecond.status).to.equal('error');
     expect(resSecond.error).to.equal('name exists in the db');
   });
-  it('should get an error if name is longer than 20 characters', () => {
+  it('should get an error if name is longer than 40 characters', () => {
     const AdsObject = new AdsModel();
     AdsObject.create({
       name: 'classic', standingTime: 'short', logo: 0, priority: 0, price: 1,
@@ -102,7 +127,7 @@ describe('DiscountModel', () => {
 
     const DiscountObject = new DiscountModel();
     const res = DiscountObject.create({
-      name: 'ABCDEFGHIJKLMNOPLMOJK', type: 'more', adsName: 'classic', bought: 2, willget: 3,
+      name: 'ABCDEFGHIJKLMNOPLMOJKABCDEFGHIJKLMNOPLMOJK', type: 'more', adsName: 'classic', bought: 2, willget: 3,
     });
     expect(res.status).to.equal('error');
     expect(res.error).to.equal('name is not valid');
